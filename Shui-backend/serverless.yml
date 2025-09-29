@@ -1,0 +1,111 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: hasanprojects
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: Shui-backend
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-north-1
+  IAM:
+    role: arn:aws:iam::361920973367:role/Fe_24_Hasan
+    httpApi:
+      cors: true
+      enviroment:
+        Table_Name: ${self:service}-messages-${sls:stage }
+
+functions:
+  createMessage:
+    handler: functions/createMessage/index.handler
+    events:
+      - httpApi:
+          path: /messages
+          method: post
+
+  updateMessage:
+    handler: functions/updateMessage/index.handler
+    events:
+      - httpApi:
+          path: /messages/{id}
+          method: put
+
+  listMessages:
+    handler: functions/listMessages/index.handler
+    events:
+      - httpApi:
+          path: /messages
+          method: get
+
+resources:
+  Resources:
+    MessagesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TABLE_NAME}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: PK
+            AttributeType: S
+          - AttributeName: SK
+            AttributeType: S
+          - AttributeName: TYPE
+            AttributeType: S
+          - AttributeName: USER
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
+        KeySchema:
+          - AttributeName: PK
+            KeyType: HASH
+          - AttributeName: SK
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: GSI_All_ByDate
+            KeySchema:
+              - AttributeName: TYPE
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: GSI_ByUser_ByDate
+            KeySchema:
+              - AttributeName: USER
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+    FrontendBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:service}-frontend-${sls:stage}
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: false
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: false
+
+    FrontendBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref FrontendBucket
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Sid: PublicReadForWebsite
+              Effect: Allow
+              Principal: '*'
+              Action: s3:GetObject
+              Resource: arn:aws:s3:::${self:service}-frontend-${sls:stage}/*
+
+  Outputs:
+    ApiBaseUrl:
+      Value: https://${cf:${self:service}-${sls:stage}.HttpApiId}.execute-api.${aws:region}.amazonaws.com
+    WebsiteURL:
+      Value: !GetAtt FrontendBucket.WebsiteURL
+          
