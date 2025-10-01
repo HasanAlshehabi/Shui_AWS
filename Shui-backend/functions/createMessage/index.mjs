@@ -1,39 +1,35 @@
-import {dynamoDBDocClient} from "@aws-sdk/client-dynamodb";
-import {PutCommand} from "@aws-sdk/lib-dynamodb";
+import { PutCommand } from "@aws-sdk/lib-dynamodb";
+import { doc } from "../../services/db.mjs";
+import crypto from "node:crypto";
 
-const ddb = dynamoDBDocClient();
-const Shui_table = process.env.MESSAGES_TABLE;
-
+const Shui_table = process.env.TABLE_NAME;
 
 export const handler = async (event) => {
   try {
     const body = JSON.parse(event.body || "{}");
     const { username, text } = body;
-    if (!username || !text) return json(400, { error: "username och text krävs" });
+    if (!username || !text) return json(400, { error: "username and text are required" });
 
-    const id = randomId();
+    const id = crypto.randomUUID();
     const createdAt = new Date().toISOString();
 
-    const item = {
-      PK: `MSG#${id}`,
-      SK: "MSG",
-      id, username, text, createdAt,
-      TYPE: "MESSAGE",
-      USER: `USER#${username}`
-    };
-
-    await ddb.send(new PutCommand({
+    await doc.send(new PutCommand({
       TableName: Shui_table,
-      Item: item,
+      Item: {
+        PK: `MSG#${id}`,
+        SK: "MSG",
+        id, username, text, createdAt,
+        TYPE: "MESSAGE",
+        USER: `USER#${username}`
+      },
       ConditionExpression: "attribute_not_exists(PK)"
     }));
 
-    return json(201, publicMsg(item));
+    return json(201, { id, username, text, createdAt });
   } catch (e) {
-    return json(500, { error: e.message || "Serverfel" });
+    console.error(e);
+    return json(500, { error: e.message || "Server error" });
   }
 };
 
-function publicMsg(i){ return { id: i.id, username: i.username, text: i.text, createdAt: i.createdAt }; }
-function json(status, data){ return { statusCode: status, headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }; }
-function randomId(){ return [...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(16).padStart(2,"0")).join(""); }
+const json = (s, d) => ({ statusCode: s, headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) });

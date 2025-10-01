@@ -7,12 +7,13 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: eu-north-1
-  IAM:
+  stage: dev
+  iam:
     role: arn:aws:iam::361920973367:role/Fe_24_Hasan
-    httpApi:
-      cors: true
-      enviroment:
-        Table_Name: ${self:service}-messages-${sls:stage }
+  httpApi:
+    cors: true
+  environment:
+    TABLE_NAME: shui_messages   # enkelt namn
 
 functions:
   createMessage:
@@ -41,7 +42,7 @@ resources:
     MessagesTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.TABLE_NAME}
+        TableName: shui_messages   # matchar environment
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: PK
@@ -80,7 +81,7 @@ resources:
     FrontendBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:service}-frontend-${sls:stage}
+        BucketName: shui-frontend-dev-hasan   # enkelt, gemener, unikt
         WebsiteConfiguration:
           IndexDocument: index.html
           ErrorDocument: index.html
@@ -101,11 +102,13 @@ resources:
               Effect: Allow
               Principal: '*'
               Action: s3:GetObject
-              Resource: arn:aws:s3:::${self:service}-frontend-${sls:stage}/*
+              Resource: arn:aws:s3:::shui-frontend-dev-hasan/*
 
   Outputs:
+    # Fungerar på första deploy (ingen cf: behövs)
     ApiBaseUrl:
-      Value: https://${cf:${self:service}-${sls:stage}.HttpApiId}.execute-api.${aws:region}.amazonaws.com
+      Value:
+        Fn::Sub: https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
     WebsiteURL:
       Value: !GetAtt FrontendBucket.WebsiteURL
-          
+
