@@ -11,7 +11,7 @@ export default function ViewNote({ open, note, onClose }) {
           <div className="viewnote-header">
             <div className="viewnote-user">
               <div className="viewnote-avatar">
-                <img src="./src/assets/note.png" alt="" className="viewnote-icon" />
+                <img src="/note.png" alt="" className="viewnote-icon" />
               </div>
               <div>
                 <div id="note-title" className="viewnote-name">@{note.username}</div>
