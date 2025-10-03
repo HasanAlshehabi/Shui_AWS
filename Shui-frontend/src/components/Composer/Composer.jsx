@@ -2,14 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import './composer.css'
 
 export default function Composer({ open, onClose, onSubmit }) {
-  // friendlier state names
   const [author, setAuthor] = useState('')
   const [noteText, setNoteText] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
   const modalRef = useRef(null)
 
-  // focus the modal when it opens
   useEffect(() => {
     if (open) setTimeout(() => modalRef.current?.focus(), 0)
   }, [open])
