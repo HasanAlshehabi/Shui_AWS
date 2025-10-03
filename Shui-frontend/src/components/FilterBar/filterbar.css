@@ -1,0 +1,19 @@
+.filterbar{ 
+  display:flex; 
+  flex-direction:column; 
+  gap:12px; 
+  padding:12px 
+}
+
+@media (min-width:640px){
+  .filterbar{ flex-direction:row; 
+    align-items:center; 
+    justify-content:space-between 
+  }
+}
+
+.filterbar-controls{ 
+  display:flex; 
+  gap:8px; 
+  flex:1
+}
