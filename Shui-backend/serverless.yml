@@ -11,9 +11,14 @@ provider:
   iam:
     role: arn:aws:iam::361920973367:role/Fe_24_Hasan
   httpApi:
-    cors: true
+    cors:
+      allowedOrigins:
+        - http://localhost:5173
+        - http://shui-frontend-dev-hasan.s3-website-eu-north-1.amazonaws.com
+      allowedMethods: [GET, POST, PUT, OPTIONS]
+      allowedHeaders: [Content-Type]
   environment:
-    TABLE_NAME: shui_messages   # enkelt namn
+    TABLE_NAME: shui_messages
 
 functions:
   createMessage:
@@ -42,7 +47,7 @@ resources:
     MessagesTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: shui_messages   # matchar environment
+        TableName: shui_messages 
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: PK
@@ -81,7 +86,7 @@ resources:
     FrontendBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: shui-frontend-dev-hasan   # enkelt, gemener, unikt
+        BucketName: shui-frontend-dev-hasan 
         WebsiteConfiguration:
           IndexDocument: index.html
           ErrorDocument: index.html
@@ -105,7 +110,6 @@ resources:
               Resource: arn:aws:s3:::shui-frontend-dev-hasan/*
 
   Outputs:
-    # Fungerar på första deploy (ingen cf: behövs)
     ApiBaseUrl:
       Value:
         Fn::Sub: https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
