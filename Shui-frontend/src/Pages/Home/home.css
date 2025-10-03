@@ -1,0 +1,53 @@
+.home{ 
+    padding:24px 0 
+}
+
+.home-error{ 
+    border-radius:16px; 
+    padding:12px; 
+    margin-top:12px; 
+    color:#fecaca; 
+    border-color:#fecaca44 
+}
+
+.home-overlays{ 
+    display:grid; 
+    gap:12px; 
+    margin-top:12px 
+}
+
+.home-overlay{ 
+    border-radius:16px; 
+    padding:16px 
+}
+
+.home-empty{ 
+    text-align:center; 
+    padding:40px; 
+    border-radius:24px; 
+    margin-top:12px 
+}
+
+.home-empty-title{ 
+    font-size:20px; 
+    font-weight:600; 
+    margin:0 
+}
+
+.home-empty-sub{ 
+    color:var(--muted) 
+}
+
+.home-cards{ 
+    display:grid; 
+    gap:16px; 
+    margin-top:12px 
+}
+
+.new-note{
+  width:45px;
+  height:45px;
+  object-fit:contain;
+  display:block;
+  pointer-events:none;
+}

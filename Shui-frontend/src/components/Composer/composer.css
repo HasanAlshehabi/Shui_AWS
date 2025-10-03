@@ -1,0 +1,37 @@
+/* full-screen dimmer behind the modal */
+.backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+}
+
+/* centers the panel */
+.modal{
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+/* the glassy dialog card */
+.panel{
+  width: min(92vw, 720px);
+  padding: 20px;
+  border-radius: 24px;
+}
+
+/* actions row under the textarea */
+.panel-footer{
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  align-items: center;
+}
+
+@media (max-width: 520px){
+  .panel-footer{
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

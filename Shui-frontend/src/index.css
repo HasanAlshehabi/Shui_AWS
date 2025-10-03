@@ -1,68 +1,116 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+@import url('https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Sansita:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700;1,800;1,900&display=swap');
+
+
+:root{
+  --navy:#0d1420; 
+  --brand:#6366f1;
+  --coral:#6366f1; 
+  --text:#e5e7eb; 
+  --muted:#94a3b8;
+  --glass-border: rgba(255,255,255,.10); 
+  --glass-bg: rgba(255,255,255,.06);
+  --shadow: 0 10px 30px rgba(0,0,0,.45);
+  --app-font: "Alan Sans";
+}
+
+*{ box-sizing:border-box }
+html,body,#root{ height:100% }
+
+
+html, body{
+  margin:0; 
+  font-family: var(--app-font);
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background: var(--navy); 
+  color: var(--text);
+  background-image:
+    radial-gradient(1200px 700px at 80% -10%, rgba(99,102,241,.25), transparent 60%),
+    radial-gradient(900px 500px at -10% 0%, rgba(34,211,238,.20), transparent 60%);
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed;
+  background-size: 1600px 900px, 1200px 700px;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+
+.container{ 
+  max-width:960px; 
+  margin:0 auto; 
+  padding:0 16px }
+
+
+.glass{
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border:1px solid var(--glass-border); 
+  border-radius:16px; 
+  box-shadow: var(--shadow);
 }
-a:hover {
-  color: #535bf2;
+.btn{
+  font: var(--app-font);
+  display:inline-flex; 
+  align-items:center; 
+  justify-content:center; 
+  gap:8px;
+  padding:10px 14px; 
+  border-radius:12px; 
+  border:1px solid var(--glass-border);
+  background: rgba(255,255,255,.08); color:var(--text); cursor:pointer;
+}
+.btn:hover{ 
+  background: rgba(255,255,255,.12) 
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+.btn-primary{ 
+  background: var(--coral); 
+  border-color: var(--coral); 
+  color:#fff 
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.btn-primary:hover{ 
+  filter: brightness(1.05) 
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.input,.select,.textarea{
+  font: var(--app-font);
+  width:100%; 
+  border-radius:12px; 
+  border:1px solid var(--glass-border);
+  background: rgba(255,255,255,.05); 
+  color:var(--text); padding:10px 12px;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.select option{
+  background-color: #0d1420;
+  color: #e5e7eb;
+}
+.select option:disabled{ color: #8b95a7; }
+
+.overlay{ 
+  animation: pulse 1.2s ease-in-out infinite; 
+  background: rgba(255,255,255,.08); 
+  border-radius: 8px; 
+  height: 14px 
+}
+
+@keyframes pulse{ 
+  0%{opacity:.6} 50%{opacity:1} 100%{opacity:.6} 
+}
+
+.newnote{
+  position: fixed; 
+  right: 24px; 
+  bottom: 24px; 
+  width:56px; 
+  height:56px;
+  border-radius:16px; 
+  background: var(--coral); 
+  color:#fff; 
+  border:none; 
+  box-shadow: var(--shadow);
+  font-size: 22px; 
+  cursor:pointer;
+}
+
+.fab:hover{ 
+  transform: scale(1.05) 
 }
