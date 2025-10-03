@@ -88,7 +88,7 @@ export default function Home() {
         aria-label="Write a new note."
         onClick={() => setIsComposerOpen(true)}
       >
-        <img src="./src/assets/write-note.png" alt="" className="new-note" />
+        <img src="/write-note.png" alt="" className="new-note" />
       </button>
 
       <Composer

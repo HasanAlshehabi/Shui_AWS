@@ -23,7 +23,7 @@ export default function MessageCard({ message, onSave, onOpen }) {
       <div className="card-top">
         <div className="card-user">
           <div className="card-avatar">
-            <img src="./src/assets/note.png" alt="card-icon" className="card-icon" />
+            <img src="/note.png" alt="card-icon" className="card-icon" />
           </div>
           <div>
             <div style={{fontWeight:600}}>{message.username}</div>
@@ -50,7 +50,7 @@ export default function MessageCard({ message, onSave, onOpen }) {
             onClick={(e)=>e.stopPropagation()}
           />
           <div className="card-actions">
-            <button className="btn" onClick={(e)=>{ e.stopPropagation(); setEditing(false); setText(message.text) }}>Avbryt</button>
+            <button className="btn" onClick={(e)=>{ e.stopPropagation(); setEditing(false); setText(message.text) }}>Close</button>
             <button className="btn btn-primary" onClick={async (e)=>{
               e.stopPropagation(); await onSave(text); setEditing(false)}}>Save</button>
           </div>
